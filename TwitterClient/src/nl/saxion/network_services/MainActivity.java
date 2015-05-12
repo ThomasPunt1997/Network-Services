@@ -1,4 +1,6 @@
-package com.example.twitter_network_services;
+package nl.saxion.network_services;
+
+import com.example.twitter_network_services.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,10 +13,6 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//hallo
-		//hallo 2
-		//hallo 3
-
 	}
 
 	@Override
