@@ -30,7 +30,6 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 	private LayoutInflater inflater;
 	private ImageView profile_Image;
 	private Spannable blueColor;
-	private Spannable blueHashtagColor;
 
 	public TwitterAdapter(Context context, int resource, List<Tweet> objects) {
 		super(context, resource, objects);
@@ -55,22 +54,23 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 		name.setText(tweet.getUser().getName());
 		screen_name.setText("@" + tweet.getUser().getScreen_name());
 		
+		blueColor = new SpannableString(tweet.getText());
+		
 		if(tweet.getEntitie().getUsermentions().size() > 0) {
 			for(UserMention user : tweet.getEntitie().getUsermentions()) {			
-				blueColor = setColorToText(tweet.getText(), user.getBegin(), user.getEinde());
+				setColorToText(user.getBegin(), user.getEinde());
 			}
-			tweet_text.setText(blueColor);
-		} else {
-			tweet_text.setText(tweet.getText());
 		}
 		
 		//hashtags
-		
 		if(tweet.getEntitie().getHashtags().size() > 0) {
 			for(Hashtag hash : tweet.getEntitie().getHashtags()) {			
-				blueHashtagColor = setColorToText(tweet.getText(), hash.getBegin(), hash.getEinde());
+				setColorToText(hash.getBegin(), hash.getEinde());
 			}
-			tweet_text.setText(blueHashtagColor);
+		}
+		
+		if(blueColor != null) {
+			tweet_text.setText(blueColor);
 		} else {
 			tweet_text.setText(tweet.getText());
 		}
@@ -106,10 +106,7 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 	    }
 	}
 	
-	public Spannable setColorToText(String text, int begin, int end) {
-		Spannable wordtoSpan = new SpannableString(text);
-		wordtoSpan.setSpan(new ForegroundColorSpan(Color.BLUE), begin, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		
-		return wordtoSpan;
+	public void setColorToText(int begin, int end) {
+		blueColor.setSpan(new ForegroundColorSpan(Color.BLUE), begin, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 }
