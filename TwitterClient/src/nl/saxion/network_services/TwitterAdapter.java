@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.example.twitter_network_services.R;
 
+import nl.saxion.network_services.objects.Hashtag;
 import nl.saxion.network_services.objects.Tweet;
 import nl.saxion.network_services.objects.UserMention;
 import android.content.Context;
@@ -29,6 +30,7 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 	private LayoutInflater inflater;
 	private ImageView profile_Image;
 	private Spannable blueColor;
+	private Spannable blueHashtagColor;
 
 	public TwitterAdapter(Context context, int resource, List<Tweet> objects) {
 		super(context, resource, objects);
@@ -58,6 +60,17 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 				blueColor = setColorToText(tweet.getText(), user.getBegin(), user.getEinde());
 			}
 			tweet_text.setText(blueColor);
+		} else {
+			tweet_text.setText(tweet.getText());
+		}
+		
+		//hashtag
+		
+		if(tweet.getEntitie().getHashtags().size() > 0) {
+			for(Hashtag hash : tweet.getEntitie().getHashtags()) {			
+				blueHashtagColor = setColorToText(tweet.getText(), hash.getBegin(), hash.getEinde());
+			}
+			tweet_text.setText(blueHashtagColor);
 		} else {
 			tweet_text.setText(tweet.getText());
 		}

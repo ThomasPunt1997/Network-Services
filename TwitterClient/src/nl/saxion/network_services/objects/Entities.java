@@ -20,6 +20,16 @@ public class Entities {
 				UserMention usermention = new UserMention(usermentionObject);
 				usermentions.add(usermention);
 			}
+			
+			
+			JSONArray hashtag = obj.getJSONArray("hashtags");
+			
+			for(int i = 0; i < hashtag.length(); i++) {
+				JSONObject hashtagObject = hashtag.getJSONObject(i);
+				Hashtag hash = new Hashtag(hashtagObject);
+				hashtags.add(hash);
+			}
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
