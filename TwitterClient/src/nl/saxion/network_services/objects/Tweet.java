@@ -19,6 +19,8 @@ public class Tweet {
 			id = obj.getString("id_str");
 			favorite_count = obj.getInt("favorite_count");
 			retweet_count = obj.getInt("retweet_count");
+			user = new User(obj.getJSONObject("user"));
+			entitie = new Entities(obj.getJSONObject("entities"));
 		} 
 		catch (JSONException e) {
 			e.printStackTrace();
