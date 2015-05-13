@@ -64,7 +64,7 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 			tweet_text.setText(tweet.getText());
 		}
 		
-		//hashtag
+		//hashtags
 		
 		if(tweet.getEntitie().getHashtags().size() > 0) {
 			for(Hashtag hash : tweet.getEntitie().getHashtags()) {			
