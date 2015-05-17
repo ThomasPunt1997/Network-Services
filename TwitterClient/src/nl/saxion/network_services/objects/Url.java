@@ -4,17 +4,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Media {
+public class Url {
+	
 	private int begin;
 	private int eind;
-	private String media_url;
+	private String url;
 	
-	public Media(JSONObject obj){
+	public Url(JSONObject obj) {
 		try {
 			JSONArray ints = obj.getJSONArray("indices");
 			begin = ints.getInt(0);
 			eind = ints.getInt(1);
-			media_url = obj.getString("media_url");
+			url = obj.getString("url");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -36,11 +37,12 @@ public class Media {
 		this.eind = eind;
 	}
 
-	public String getMedia_url() {
-		return media_url;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setMedia_url(String media_url) {
-		this.media_url = media_url;
+	public void setUrl(String url) {
+		this.url = url;
 	}
+
 }

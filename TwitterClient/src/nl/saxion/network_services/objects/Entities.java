@@ -10,6 +10,7 @@ public class Entities {
 	private ArrayList<Hashtag> hashtags = new ArrayList<Hashtag>();
 	private ArrayList<Media> medias = new ArrayList<Media>();
 	private ArrayList<UserMention> usermentions = new ArrayList<UserMention>();
+	private ArrayList<Url> urls = new ArrayList<Url>();
 	
 	public Entities(JSONObject obj){
 		try {
@@ -30,11 +31,35 @@ public class Entities {
 				hashtags.add(hash);
 			}
 			
+			JSONArray mediaArray = obj.getJSONArray("media");
+			
+			for(int i = 0; i < mediaArray.length(); i++) {
+				JSONObject mediaObject = mediaArray.getJSONObject(i);
+				Media media = new Media(mediaObject);
+				medias.add(media);
+			}
+			
+			JSONArray urlArray = obj.getJSONArray("urls");
+			
+			for(int i = 0; i < urlArray.length(); i++) {
+				JSONObject urlObject = urlArray.getJSONObject(i);
+				Url url = new Url(urlObject);
+				urls.add(url);
+			}
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public ArrayList<Url> getUrls() {
+		return urls;
+	}
+
+	public void setUrls(ArrayList<Url> urls) {
+		this.urls = urls;
+	}
+
 	public UserMention getUserMentionFromPosition(int position) {
 		return usermentions.get(position);
 	}

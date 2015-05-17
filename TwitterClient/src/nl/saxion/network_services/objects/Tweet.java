@@ -11,6 +11,7 @@ public class Tweet {
 	private int retweet_count;
 	private User user;
 	private Entities entitie;
+	private Media media;
 	
 	public Tweet(JSONObject obj){
 		try {
