@@ -23,8 +23,10 @@ import android.os.AsyncTask;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,33 +69,36 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 		
 		blueColor = new SpannableString(tweet.getText());
 		
+		//Usermentions
 		if(tweet.getEntitie().getUsermentions().size() > 0) {
 			for(UserMention user : tweet.getEntitie().getUsermentions()) {			
 				setColorToText(user.getBegin(), user.getEinde());
 			}
 		}
 		
-		//hashtags
+		//Hashtags
 		if(tweet.getEntitie().getHashtags().size() > 0) {
 			for(Hashtag hash : tweet.getEntitie().getHashtags()) {			
 				setColorToText(hash.getBegin(), hash.getEinde());
 			}
 		}
 		
-		//media's
+		//Media's
 		if(tweet.getEntitie().getMedias().size() > 0) {
 			for(Media med : tweet.getEntitie().getMedias()) {			
 				setColorToText(med.getBegin(), med.getEind());
 			}
 		}
 		
-		//media's
+		//Url
 		if(tweet.getEntitie().getUrls().size() > 0) {
-			for(Url url : tweet.getEntitie().getUrls()) {			
-				setColorToText(url.getBegin(), url.getEind());
+			for(Url url : tweet.getEntitie().getUrls()) {	
+				blueColor.setSpan(new URLSpan(url.getUrl()), url.getBegin(), url.getEind(), 0);
+				Log.d("URL", url.getUrl());
 			}
 		}
 		
+		//Checks if there is any text that has to be blue.
 		if(blueColor != null) {
 			tweet_text.setText(blueColor);
 		} else {
@@ -109,23 +114,17 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 			image_add.setVisibility(View.INVISIBLE);
 		}
 		
-		if(tweet.getEntitie().getUrls().size() > 0) {
-			MyCustomSpannable customSpannable = new MyCustomSpannable(tweet.getEntitie().getUrls().get(0).getUrl()){
-	
-				@Override
-				public void onClick(View widget) {
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse(this.getUrl()));
-				context.startActivity(intent);
-				}
-			}; 
-		}
-		
-		
+		tweet_text.setLinksClickable(true);
+		tweet_text.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		return convertView;
 	}
 	
+	/**
+	 * Converts an URL into an image and shows it in your ImageView.
+	 * @author Thomas & Wouter
+	 *
+	 */
 	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 	    ImageView bmImage;
 
@@ -150,32 +149,12 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 	    }
 	}
 	
+	/**
+	 * Makes part of the text blue.
+	 * @param begin the startposition
+	 * @param end the endposition
+	 */
 	public void setColorToText(int begin, int end) {
 		blueColor.setSpan(new ForegroundColorSpan(Color.BLUE), begin, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-	}
-	
-	private class MyCustomSpannable extends ClickableSpan
-	{
-	    String Url;
-	    public MyCustomSpannable(String Url) {
-	        this.Url = Url;
-	    }
-	    @Override
-	    public void updateDrawState(TextPaint ds) {
-	            // Customize your Text Look if required
-	        ds.setColor(Color.YELLOW);
-	        ds.setFakeBoldText(true);
-	        ds.setStrikeThruText(true);
-	        ds.setTypeface(Typeface.SERIF);
-	        ds.setUnderlineText(true);
-	        ds.setShadowLayer(10, 1, 1, Color.WHITE);
-	        ds.setTextSize(15);
-	    }
-	    @Override
-	    public void onClick(View widget) {
-	    }
-	    public String getUrl() {
-	        return Url;
-	    }
 	}
 }

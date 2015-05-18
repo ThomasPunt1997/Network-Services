@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class Url {
 	
 	private int begin;
@@ -12,10 +14,11 @@ public class Url {
 	
 	public Url(JSONObject obj) {
 		try {
+			url = obj.getString("expanded_url");
 			JSONArray ints = obj.getJSONArray("indices");
 			begin = ints.getInt(0);
 			eind = ints.getInt(1);
-			url = obj.getString("url");
+			Log.d("Url", url);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
