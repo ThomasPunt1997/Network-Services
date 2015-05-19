@@ -14,11 +14,10 @@ public class Url {
 	
 	public Url(JSONObject obj) {
 		try {
-			url = obj.getString("expanded_url");
+			url = obj.getString("url");
 			JSONArray ints = obj.getJSONArray("indices");
 			begin = ints.getInt(0);
 			eind = ints.getInt(1);
-			Log.d("Url", url);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

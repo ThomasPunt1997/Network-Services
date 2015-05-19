@@ -94,7 +94,6 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 		if(tweet.getEntitie().getUrls().size() > 0) {
 			for(Url url : tweet.getEntitie().getUrls()) {	
 				blueColor.setSpan(new URLSpan(url.getUrl()), url.getBegin(), url.getEind(), 0);
-				Log.d("URL", url.getUrl());
 			}
 		}
 		
@@ -109,7 +108,6 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 		
 		if(tweet.getEntitie().getMedias().size() > 0) {
 			new DownloadImageTask(image_add).execute(tweet.getEntitie().getMedias().get(0).getMedia_url());
-			Log.d("Plaatje URL", tweet.getEntitie().getMedias().get(0).getMedia_url());
 		} else {
 			image_add.setVisibility(View.INVISIBLE);
 		}

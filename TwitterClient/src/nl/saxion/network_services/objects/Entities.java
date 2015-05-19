@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class Entities {
 	private ArrayList<Hashtag> hashtags = new ArrayList<Hashtag>();
 	private ArrayList<Media> medias = new ArrayList<Media>();
@@ -22,6 +24,12 @@ public class Entities {
 				usermentions.add(usermention);
 			}
 			
+			JSONArray urlArray = obj.getJSONArray("urls");
+			for(int i = 0; i < urlArray.length(); i++) {
+				JSONObject urlObject = urlArray.getJSONObject(i);
+				Url url = new Url(urlObject);
+				urls.add(url);
+			}
 			
 			JSONArray hashtag = obj.getJSONArray("hashtags");
 			
@@ -37,14 +45,6 @@ public class Entities {
 				JSONObject mediaObject = mediaArray.getJSONObject(i);
 				Media media = new Media(mediaObject);
 				medias.add(media);
-			}
-			
-			JSONArray urlArray = obj.getJSONArray("urls");
-			
-			for(int i = 0; i < urlArray.length(); i++) {
-				JSONObject urlObject = urlArray.getJSONObject(i);
-				Url url = new Url(urlObject);
-				urls.add(url);
 			}
 			
 		} catch (JSONException e) {
