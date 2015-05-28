@@ -4,7 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,40 +25,53 @@ import com.example.twitter_network_services.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity {
 
+	private static String API_KEY = "53Lp5N4gNIdsN6YNTSvd0xNsd";
+	private static String API_SECRET = "zuCJBCPg9qG59B69T0l2OyYccchPRqhGOoRVArCzuAhilskHzx";
+	private String wordToSearch = "";
+	private EditText searchWord;
+	private ListView tweetList;
+	private TwitterAdapter adapter;
+	private TwitterApp application;
+	private Model model;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		TwitterApp application = (TwitterApp) getApplicationContext();
-		Model model = application.getModel();
+		application = (TwitterApp) getApplicationContext();
+		model = application.getModel();
 		
-		try {
-			JSONObject gebrObj = new JSONObject(readAssetIntoString("searchresult.json"));
-			JSONArray getTweets = gebrObj.getJSONArray("statuses");
+		searchWord = (EditText) findViewById(R.id.txtZoekTerm);
+		Button searchButton = (Button) findViewById(R.id.btnZoek);
+		tweetList = (ListView) findViewById(R.id.listTweet);
+		
+		searchButton.setOnClickListener(new OnClickListener() {
 			
-			for(int i=0;i < getTweets.length(); i++){
-				 JSONObject tweetObject = getTweets.getJSONObject(i);
-				 Tweet tweet = new Tweet(tweetObject);
-				 model.addTweet(tweet);
+			@Override
+			public void onClick(View v) {
+				wordToSearch = searchWord.getText().toString();
+				searchTwitter task = new searchTwitter();
+				task.execute();
 			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		ListView tweetList = (ListView) findViewById(R.id.listTweet);
-		
-		TwitterAdapter adapter = new TwitterAdapter(this, R.layout.tweetview, model.getList());
-		tweetList.setAdapter(adapter);
+		});
 	}
 
 	@Override
@@ -102,5 +124,85 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		return sb.toString();		
+	}
+    
+    public String getToken() {
+    	String authString = API_KEY + ":" + API_SECRET;
+    	String base64 = Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
+    	
+    	HttpPost request = new HttpPost("https://api.twitter.com/oauth2/token");
+    	request.setHeader("Authorization", "Basic " + base64);
+    	request.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+    	
+    	try {
+			request.setEntity(new StringEntity("grant_type=client_credentials"));
+			
+			HttpClient client = new DefaultHttpClient();
+			ResponseHandler<String> handler = new BasicResponseHandler();
+			String result = client.execute(request, handler);
+			
+			JSONObject gebrObj = new JSONObject(result);
+			String token = gebrObj.getString("access_token");
+			Log.d("Token", token);
+			return token;
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return null;
+    }
+    
+    private class searchTwitter extends AsyncTask<Void, Void, String> {
+
+    	@Override
+	    protected String doInBackground(Void... urls) {
+	    	String token = getToken();
+	    	
+	    	HttpGet httpGet = new HttpGet("https://api.twitter.com/1.1/search/tweets.json?q=" + wordToSearch);	
+	    	HttpClient client = new DefaultHttpClient();
+	    	ResponseHandler<String> handler = new BasicResponseHandler();
+	    	try {
+	    		httpGet.setHeader("Authorization", "Bearer " + token);
+				String searchJSON = client.execute(httpGet, handler);
+				return searchJSON;
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	return null;
+	    }
+
+    	@Override
+	    protected void onPostExecute(String result) {
+	    	try {
+				JSONObject gebrObj = new JSONObject(result);
+				JSONArray getTweets = gebrObj.getJSONArray("statuses");
+				
+				for(int i=0;i < getTweets.length(); i++){
+					 JSONObject tweetObject = getTweets.getJSONObject(i);
+					 Tweet tweet = new Tweet(tweetObject);
+					 model.addTweet(tweet);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			} 
+			
+			ListView tweetList = (ListView) findViewById(R.id.listTweet);
+			
+			adapter = new TwitterAdapter(MainActivity.this, R.layout.tweetview, model.getList());
+			tweetList.setAdapter(adapter);
+	    }
 	}
 }

@@ -8,14 +8,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="nl.saxion.network_services.MainActivity" >
 
+    <EditText
+        android:id="@+id/txtZoekTerm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
     <ListView
         android:id="@+id/listTweet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_below="@+id/btnZoek" >
 
     </ListView>
+
+    <Button
+        android:id="@+id/btnZoek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editText1"
+        android:layout_alignRight="@+id/listTweet"
+        android:layout_toRightOf="@+id/editText1"
+        android:text="Zoek" />
 
 </RelativeLayout>
