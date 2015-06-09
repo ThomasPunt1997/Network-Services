@@ -36,8 +36,6 @@ import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity {
 
-	private static String API_KEY = "53Lp5N4gNIdsN6YNTSvd0xNsd";
-	private static String API_SECRET = "zuCJBCPg9qG59B69T0l2OyYccchPRqhGOoRVArCzuAhilskHzx";
 	private String wordToSearch = "";
 	private EditText searchWord;
 	private ListView tweetList;
@@ -121,7 +119,7 @@ public class MainActivity extends ActionBarActivity {
 	}
     
     public String getToken() {
-    	String authString = API_KEY + ":" + API_SECRET;
+    	String authString = model.API_KEY + ":" + model.API_SECRET;
     	String base64 = Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
     	
     	HttpPost request = new HttpPost("https://api.twitter.com/oauth2/token");
