@@ -22,4 +22,8 @@ public class Model {
 	public ArrayList<Tweet> getList() {
 		return tweets;
 	}
+	
+	public void setList(ArrayList<Tweet> tweets) {
+		this.tweets = tweets;
+	}
 }

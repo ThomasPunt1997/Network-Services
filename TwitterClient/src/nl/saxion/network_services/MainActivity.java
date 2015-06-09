@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-
+import java.util.ArrayList;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -17,16 +17,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import nl.saxion.network_services.model.Model;
 import nl.saxion.network_services.objects.Tweet;
-
 import com.example.twitter_network_services.R;
-
 import android.support.v7.app.ActionBarActivity;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
@@ -37,7 +32,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 public class MainActivity extends ActionBarActivity {
@@ -187,6 +181,7 @@ public class MainActivity extends ActionBarActivity {
     	@Override
 	    protected void onPostExecute(String result) {
 	    	try {
+				model.setList(new ArrayList<Tweet>());
 				JSONObject gebrObj = new JSONObject(result);
 				JSONArray getTweets = gebrObj.getJSONArray("statuses");
 				
@@ -200,7 +195,7 @@ public class MainActivity extends ActionBarActivity {
 			} 
 			
 			ListView tweetList = (ListView) findViewById(R.id.listTweet);
-			
+		
 			adapter = new TwitterAdapter(MainActivity.this, R.layout.tweetview, model.getList());
 			tweetList.setAdapter(adapter);
 	    }

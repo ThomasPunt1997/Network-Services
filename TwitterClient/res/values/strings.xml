@@ -4,5 +4,8 @@
     <string name="app_name">Twitter_Network_Services</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
+    <color name="yellow">#FFFF00</color>
+    <color name="dark_orange">#FF8C00</color>
 
 </resources>
