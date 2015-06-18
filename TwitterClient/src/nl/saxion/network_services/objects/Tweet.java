@@ -3,6 +3,8 @@ package nl.saxion.network_services.objects;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+
 public class Tweet {
 	private String id;
 	private String text;
@@ -12,7 +14,16 @@ public class Tweet {
 	private User user;
 	private Entities entitie;
 	private Media media;
+	private Bitmap image;
 	
+	public Bitmap getImage() {
+		return image;
+	}
+
+	public void setImage(Bitmap image) {
+		this.image = image;
+	}
+
 	public Tweet(JSONObject obj){
 		try {
 			text = obj.getString("text");

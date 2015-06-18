@@ -42,6 +42,7 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 	private ImageView image_add;
 	private Spannable blueColor;
 	private Context context;
+	private Tweet tweet;
 
 	public TwitterAdapter(Context context, int resource, List<Tweet> objects) {
 		super(context, resource, objects);
@@ -62,7 +63,7 @@ public class TwitterAdapter extends ArrayAdapter<Tweet> {
 		TextView tweet_text = (TextView) convertView.findViewById(R.id.lblTweetText);
 		image_add = (ImageView) convertView.findViewById(R.id.imageView1);
 		
-		Tweet tweet = getItem(position);
+		tweet = getItem(position);
 		
 		name.setText(tweet.getUser().getName());
 		screen_name.setText("@" + tweet.getUser().getScreen_name());

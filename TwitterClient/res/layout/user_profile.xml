@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/yellow" >
+        android:background="@color/blue" >
 
         <ImageView
             android:id="@+id/imgProfileImage"
@@ -24,15 +24,15 @@
                 android:id="@+id/lblName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
                 android:text="Hans Worst"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/lblUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:text="Hans_Worst"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -40,7 +40,7 @@
                 android:id="@+id/lblDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:text="Hier komt de beschrijving"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -50,8 +50,8 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:background="@color/yellow"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:background="@color/blue" >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:layout_height="wrap_content"
                 android:text="Followers"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -72,7 +72,7 @@
                 android:id="@+id/lblFollowersCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:text="00"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -89,7 +89,7 @@
                 android:id="@+id/TextView02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:text="Friends"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -97,7 +97,7 @@
                 android:id="@+id/lblFriendsCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:text="00"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
@@ -113,7 +113,7 @@
                 android:id="@+id/TextView04"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:text="Favorites"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -121,17 +121,68 @@
                 android:id="@+id/lblFavoritesCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/dark_orange"
+                android:textColor="@color/white"
                 android:text="00"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+
         </LinearLayout>
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/listView1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/txtTweetText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:maxLength="140" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center" >
+
+                <TextView
+                    android:id="@+id/lblCharacters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0/140" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/btnSendTweet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Verstuur" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+        </ListView>
+
+    </LinearLayout>
 
 </LinearLayout>
