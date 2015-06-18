@@ -9,6 +9,10 @@ public class User {
 	private String name;
 	private String screen_name;
 	private String profile_image_url;
+	private String description;
+	private int followers;
+	private int favorites;
+	private int friends;
 	
 	public User(JSONObject obj){
 		try {
@@ -17,10 +21,46 @@ public class User {
 			name = obj.getString("name");
 			screen_name = obj.getString("screen_name");
 			profile_image_url = obj.getString("profile_image_url");
+			description = obj.getString("description");
+			followers = obj.getInt("followers_count");
+			favorites = obj.getInt("favorites_count");
+			friends = obj.getInt("friends_count");
 		} 
 		catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public int getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(int followers) {
+		this.followers = followers;
+	}
+
+	public int getFavorites() {
+		return favorites;
+	}
+
+	public void setFavorites(int favorites) {
+		this.favorites = favorites;
+	}
+
+	public int getFriends() {
+		return friends;
+	}
+
+	public void setFriends(int friends) {
+		this.friends = friends;
 	}
 
 	public String getId() {

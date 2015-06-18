@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import nl.saxion.network_services.objects.Tweet;
+import nl.saxion.network_services.objects.User;
 
 public class Model {
 	private ArrayList<Tweet> tweets;
+	private ArrayList<Tweet> timelineTweets;
 	
 	public OAuthConsumer consumer;
 	public OAuthProvider provider;
@@ -21,12 +23,35 @@ public class Model {
 	
 	public static String CALLBACK_URL = "https://www.dumpert.nl/haharaar";
 	
+	private User loggedInUser = null;
+	
+	public User getLoggedInUser() {
+		return loggedInUser;
+	}
+
+	public void setLoggedInUser(User loggedInUser) {
+		this.loggedInUser = loggedInUser;
+	}
+
 	public Model(){
 		tweets = new ArrayList<Tweet>();
+		timelineTweets = new ArrayList<Tweet>();
 	}
 	
+	public ArrayList<Tweet> getTimelineTweets() {
+		return timelineTweets;
+	}
+
+	public void setTimelineTweets(ArrayList<Tweet> timelineTweets) {
+		this.timelineTweets = timelineTweets;
+	}
+
 	public void addTweet(Tweet tweet) {
 		tweets.add(tweet);
+	}
+	
+	public void addTweetToTimeLine(Tweet tweet) {
+		timelineTweets.add(tweet);
 	}
 	
 	public Tweet getTweet(int position) {

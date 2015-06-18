@@ -1,16 +1,30 @@
 package com.example.twitter_network_services;
 
+import java.io.IOException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
+import nl.saxion.network_services.ProfileActivity;
 import nl.saxion.network_services.TwitterApp;
 import nl.saxion.network_services.model.Model;
+import nl.saxion.network_services.objects.Tweet;
+import nl.saxion.network_services.objects.User;
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +55,8 @@ public class AuthorizeActivity extends ActionBarActivity {
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if(url.startsWith("https://www.dumpert.nl/haharaar")) {
 					verifier = Uri.parse(url).getQueryParameter("oauth_verifier");
+					getAccessToken tokenTask = new getAccessToken();
+					tokenTask.execute();
 					return true;
 				}
 				return false;
@@ -109,9 +125,17 @@ public class AuthorizeActivity extends ActionBarActivity {
 			try {
 				model.provider.retrieveAccessToken(model.consumer, verifier);
 				HttpGet request = new HttpGet("https://api.twitter.com/1.1/account/verify_credentials.json");
+				HttpGet timelineRequest = new HttpGet("https://api.twitter.com/1.1/statuses/home_timeline.json");
 				try {
 					signInWithUser(request);
+					getTimeLine(timelineRequest);
 				} catch (OAuthException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -133,11 +157,44 @@ public class AuthorizeActivity extends ActionBarActivity {
 		
 		@Override
 		protected void onPostExecute(String result) {
-			
+			Intent i = new Intent(AuthorizeActivity.this, ProfileActivity.class);
+			startActivity(i);
 		}
 	}
 	
-	public void signInWithUser(HttpRequestBase request) throws OAuthException {
+	public void signInWithUser(HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
 		model.consumer.sign(request);
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpResponse userJson = httpClient.execute(request);
+		String json_string = EntityUtils.toString(userJson.getEntity());
+		JSONObject user = null;
+		try {
+			user = new JSONObject(json_string);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		User loggedUser = new User(user);
+		model.setLoggedInUser(loggedUser);
+	}
+	
+	public void getTimeLine (HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
+		model.consumer.sign(request);
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpResponse userJson = httpClient.execute(request);
+		String json_string = EntityUtils.toString(userJson.getEntity());
+		JSONArray timeline = null;
+		try {
+			timeline = new JSONArray(json_string);
+			
+			for(int i=0;i < timeline.length(); i++){
+				 JSONObject tweetObject = timeline.getJSONObject(i);
+				 Tweet tweet = new Tweet(tweetObject);
+				 model.addTweetToTimeLine(tweet);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
