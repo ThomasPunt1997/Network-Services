@@ -25,6 +25,8 @@ import nl.saxion.network_services.objects.Tweet;
 import nl.saxion.network_services.objects.User;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,11 +41,16 @@ public class AuthorizeActivity extends ActionBarActivity {
 	private Model model;
 	private WebView web;
 	private String verifier;
+	private SharedPreferences prefs;
+	private Editor edit;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_authorize);
+		
+		prefs = getApplicationContext().getSharedPreferences("MyPrefs", MODE_PRIVATE);
+		edit = prefs.edit();
 		
 		TwitterApp app = (TwitterApp) getApplicationContext();
 		model = app.getModel();
@@ -124,21 +131,9 @@ public class AuthorizeActivity extends ActionBarActivity {
 		protected String doInBackground(Void... params) {
 			try {
 				model.provider.retrieveAccessToken(model.consumer, verifier);
-				HttpGet request = new HttpGet("https://api.twitter.com/1.1/account/verify_credentials.json");
-				HttpGet timelineRequest = new HttpGet("https://api.twitter.com/1.1/statuses/home_timeline.json");
-				try {
-					signInWithUser(request);
-					getTimeLine(timelineRequest);
-				} catch (OAuthException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				edit.putString("Token", model.consumer.getToken());
+				edit.putString("SecretToken", model.consumer.getTokenSecret());
+				edit.commit();
 			} catch (OAuthMessageSignerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -159,42 +154,6 @@ public class AuthorizeActivity extends ActionBarActivity {
 		protected void onPostExecute(String result) {
 			Intent i = new Intent(AuthorizeActivity.this, ProfileActivity.class);
 			startActivity(i);
-		}
-	}
-	
-	public void signInWithUser(HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
-		model.consumer.sign(request);
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpResponse userJson = httpClient.execute(request);
-		String json_string = EntityUtils.toString(userJson.getEntity());
-		JSONObject user = null;
-		try {
-			user = new JSONObject(json_string);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		User loggedUser = new User(user);
-		model.setLoggedInUser(loggedUser);
-	}
-	
-	public void getTimeLine (HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
-		model.consumer.sign(request);
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpResponse userJson = httpClient.execute(request);
-		String json_string = EntityUtils.toString(userJson.getEntity());
-		JSONArray timeline = null;
-		try {
-			timeline = new JSONArray(json_string);
-			
-			for(int i=0;i < timeline.length(); i++){
-				 JSONObject tweetObject = timeline.getJSONObject(i);
-				 Tweet tweet = new Tweet(tweetObject);
-				 model.addTweetToTimeLine(tweet);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }
