@@ -138,6 +138,15 @@ public class ProfileActivity extends ActionBarActivity {
 				
 			}
 		});
+		
+		followers.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(ProfileActivity.this, FollowersActivity.class);
+				startActivity(i);
+			}
+		});
 	}
 	
 	@Override

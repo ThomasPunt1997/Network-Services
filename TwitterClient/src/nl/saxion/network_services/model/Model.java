@@ -10,7 +10,16 @@ import nl.saxion.network_services.objects.User;
 public class Model {
 	private ArrayList<Tweet> tweets;
 	private ArrayList<Tweet> timelineTweets;
+	private ArrayList<User> followersList;
 	
+	public ArrayList<User> getFollowersList() {
+		return followersList;
+	}
+
+	public void setFollowersList(ArrayList<User> followersList) {
+		this.followersList = followersList;
+	}
+
 	public OAuthConsumer consumer;
 	public OAuthProvider provider;
 	
@@ -36,6 +45,7 @@ public class Model {
 	public Model(){
 		tweets = new ArrayList<Tweet>();
 		timelineTweets = new ArrayList<Tweet>();
+		followersList = new ArrayList<User>();
 	}
 	
 	public ArrayList<Tweet> getTimelineTweets() {
