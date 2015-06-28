@@ -61,6 +61,13 @@ public class FollowersActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/**
+	 * Gets all followers of the logged in user.
+	 * @param request URL to followers list.
+	 * @throws OAuthException
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public void getFollowers(HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
 		model.consumer.sign(request);
 		HttpClient httpClient = new DefaultHttpClient();
@@ -84,6 +91,11 @@ public class FollowersActivity extends ActionBarActivity {
 		}
 	}
 	
+	/**
+	 * AsyncTask to get all followers. In the onPostExecute it will set the adapter of the list.
+	 * @author Thomas & Wouter
+	 *
+	 */
 	private class getFollowersTask extends AsyncTask<Void, Void, String> {
 
 		@Override

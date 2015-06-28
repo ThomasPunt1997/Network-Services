@@ -168,6 +168,13 @@ public class ProfileActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/**
+	 * Get the timeline of the logged in user
+	 * @param request URL to get timeline.
+	 * @throws OAuthException
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public void getTimeLine (HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
 		model.consumer.sign(request);
 		HttpClient httpClient = new DefaultHttpClient();
@@ -188,6 +195,11 @@ public class ProfileActivity extends ActionBarActivity {
 		}
 	}
 
+	/**
+	 * 
+	 * @author Thomas & Wouter
+	 *
+	 */
 	private class getTimeLine extends AsyncTask<Void, Void, String> {
 
 		@Override
@@ -228,6 +240,11 @@ public class ProfileActivity extends ActionBarActivity {
 		}
 	}
 	
+	/**
+	 * Task to send tweets with the logged in user.
+	 * @author Wouter & Thomas
+	 *
+	 */
 	private class sendTweetTask extends AsyncTask<String, Void, String> {
 
 		private String text;
@@ -274,6 +291,13 @@ public class ProfileActivity extends ActionBarActivity {
 		}
 	}
 	
+	/**
+	 * Gets the user information that is logged in.
+	 * @param request
+	 * @throws OAuthException
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public void signInWithUser(HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
 		model.consumer.sign(request);
 		HttpClient httpClient = new DefaultHttpClient();
@@ -319,6 +343,9 @@ public class ProfileActivity extends ActionBarActivity {
 	    }
 	}
 	
+	/**
+	 * Checks if the GPS is on, if not, then ask to put on.
+	 */
 	private void buildAlertMessageNoGps() {
 	    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	    builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
@@ -337,6 +364,11 @@ public class ProfileActivity extends ActionBarActivity {
 	    alert.show();
 	}
 	
+	/**
+	 * Listener to get the longitude and latidue of your current position.
+	 * @author Thomas & Wouter
+	 *
+	 */
 	private class MyLocationListener implements LocationListener {
 
 	    @Override
@@ -357,6 +389,11 @@ public class ProfileActivity extends ActionBarActivity {
 		}
 	}
 	
+	/**
+	 * Task to get the location of the logged in user.
+	 * @author Thomas & Wouter
+	 *
+	 */
 	private class getLocation extends AsyncTask<Void, Void, String> {
 
 		@Override
@@ -394,6 +431,14 @@ public class ProfileActivity extends ActionBarActivity {
 		}
 	}
 	
+	/**
+	 * Gets the location of the logged in user, with the GPS' longitude and latitude information.
+	 * @param request URL to get location
+	 * @return String with current location
+	 * @throws OAuthException
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public String getLocationJson(HttpRequestBase request) throws OAuthException, ClientProtocolException, IOException {
 		model.consumer.sign(request);
 		HttpClient httpClient = new DefaultHttpClient();
